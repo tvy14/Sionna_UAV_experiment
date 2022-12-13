@@ -4,9 +4,15 @@
 ## iperf3 網速測試
 * Server 
 ```
-iperf3 -s --logfile log.txt -i 0.1 --timestamps
+iperf3 -s
 ```
-* Client
+* Client (server send UDP to client)
+``` 
+iperf3 -c 10.42.0.1 -t 100 --logfile log.txt -i 0.1 -R -V --udp --bitrate 0
+
 ```
-iperf3 -c client_ip -t 5 
+* Client (server send TCP to client)
+``` 
+iperf3 -c 10.42.0.1 -t 100 --logfile log.txt -i 0.1 -V --udp --bitrate 0
+
 ```
