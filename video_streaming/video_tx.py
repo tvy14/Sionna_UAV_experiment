@@ -4,6 +4,7 @@ import numpy as np
 import threading
 import time
 import json
+import getch
 
 TCP_IP = "192.168.50.36"
 TCP_PORT = 8002
@@ -98,6 +99,7 @@ class keyThread(threading.Thread):
         global change_flag
         global quality
         char = getch.getch()
+        print("you pressed:",char)
         if char=="w":
             if quality<=90:
                 quality+=5
@@ -105,7 +107,7 @@ class keyThread(threading.Thread):
             if quality>=10:
                 quality-=5
         change_flag=True
-        time.sleep(0.1)
+        time.sleep(0.01)
 
 
     
