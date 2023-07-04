@@ -35,7 +35,7 @@ while 1:
     json_msg=recvall(conn,100)
     json_msg=json_msg.decode('utf-8')
     json_msg=json.loads(json_msg)
-    print(json_msg)
+    print(type(json_msg))
     #stringData = recvall(conn, int(length))
     stringData = recvall(conn, json_msg["size"])
     #stringData = zlib.decompress(stringData)

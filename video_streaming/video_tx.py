@@ -55,7 +55,7 @@ class CamThread(threading.Thread):
             stringData = data.tostring()
 
             #-------PSNR、frame size to json-----
-            json_msg={"PSNR":psnr, "size:":len(stringData)}
+            json_msg={"PSNR":psnr, "size":len(stringData)}
             json_msg=json.dumps(json_msg)
             sock.send(json_msg.ljust(200).encode('utf-8'))
             #sock.send( (str(len(stringData)).ljust(16)).encode('utf-8'))
