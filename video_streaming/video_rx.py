@@ -73,9 +73,9 @@ while 1:
     json_msg=recvall(conn,200)
     json_msg=json_msg.decode('utf-8')
     json_msg=json.loads(json_msg)
-    print(json_msg)
-    latency=sync_time+time.time()-start_time-json_msg["time"]
-    print("latency={:.3f}s".format(latency))
+    #print(json_msg)
+    
+    #print("latency={:.3f}s".format(latency))
     #print(type(json_msg["size"]))
     #stringData = recvall(conn, int(length))
     stringData = recvall(conn, json_msg["size"])
@@ -84,6 +84,18 @@ while 1:
     data = numpy.fromstring(stringData, dtype='uint8')
     decimg=cv2.imdecode(data,1)
     #decimg = cv2.resize(decimg, (1600, 1200))
+
+    # 讓視窗可以自由縮放大小
+    cv2.namedWindow('SERVER', cv2.WINDOW_NORMAL)
+
+    # 文字
+    latency=sync_time+time.time()-start_time-json_msg["time"]
+    text = "PSNR:{:.2f}dB, Latency:{:.3f}s".format(json_msg["PSNR"], latency)
+    # 使用各種字體
+    # cv2.putText(影像, 文字, 座標, 字型, 大小, 顏色, 線條寬度, 線條種類)
+    cv2.putText(decimg, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
+
+
     if save_video:
         out.write(decimg)
     cv2.imshow('SERVER',decimg)
