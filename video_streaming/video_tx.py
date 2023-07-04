@@ -48,7 +48,7 @@ class CamThread(threading.Thread):
             new_image = np.frombuffer(imgencode, np.uint8)
             new_image=cv2.imdecode(new_image,1)
             psnr=calculate_psnr(frame, new_image)
-            print("PSNR:{.2f}dB".format(psnr))
+            print("PSNR:{:.2f}dB".format(psnr))
             #-----calculate psnr------
             data = np.array(imgencode)
             stringData = data.tostring()
