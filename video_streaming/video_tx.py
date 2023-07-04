@@ -87,23 +87,38 @@ class CamThread(threading.Thread):
 
 
 #######################
+quality=90
+encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
+change_flag=False
+class keyThread(threading.Thread):
+    def __init__(self, threadID, name, cont):
+        threading.Thread.__init__(self)
+        change_flag=False
 
+    def run(self):
+        global change_flag
+        global quality
+        char = getch.getch()
+        if char=="w":
+            if quality<=90:
+                quality+=5
+        if char=="s":
+            if quality>=10:
+                quality-=5
+        change_flag=True
+        time.sleep(0.1)
+
+
+    
+#######################
 
 #cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 cam = cv2.VideoCapture(0)
-quality=90
-encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
 while True:
-    if cv2.waitKey(1) & 0xFF == ord('w'):
-        if quality<=90:
-            quality+=5
+    if change_flag:
         encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
         print("quality:{}".format(quality))
-    if cv2.waitKey(1) & 0xFF == ord('s'):
-        if quality>=10:
-            quality-=5
-        encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
-        print("quality:{}".format(quality))
+        change_flag=False
 
     ret, frame = cam.read()
     result, imgencode = cv2.imencode('.jpg', frame, encode_param)
