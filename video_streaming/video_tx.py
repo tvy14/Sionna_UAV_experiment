@@ -4,7 +4,7 @@ import numpy
 import threading
 import time
 
-TCP_IP = "10.42.0.10"
+TCP_IP = "192.168.50.36"
 TCP_PORT = 8002
 sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))
@@ -14,7 +14,8 @@ class CamThread(threading.Thread):
     def run(self):
         global frame
         global cam
-        cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        #cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        cam = cv2.VideoCapture(0)
         while True:
             ret, frame = cam.read()
             result, imgencode = cv2.imencode('.jpg', frame, encode_param)
