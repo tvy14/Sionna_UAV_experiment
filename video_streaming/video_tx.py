@@ -4,7 +4,7 @@ import numpy as np
 import threading
 import time
 import json
-import getch
+from pynput import keyboard
 
 TCP_IP = "192.168.50.36"
 TCP_PORT = 8002
