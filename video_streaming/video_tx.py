@@ -91,9 +91,8 @@ quality=90
 encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
 change_flag=False
 class keyThread(threading.Thread):
-    def __init__(self, threadID, name, cont):
+    def __init__(self):
         threading.Thread.__init__(self)
-        change_flag=False
 
     def run(self):
         global change_flag
@@ -111,7 +110,8 @@ class keyThread(threading.Thread):
 
     
 #######################
-
+key_thread=keyThread()
+key_thread.start()
 #cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 cam = cv2.VideoCapture(0)
 while True:
@@ -140,6 +140,7 @@ while True:
 sock.close()
 cam.release()
 cv2.destroyAllWindows()
+
 
 
 
