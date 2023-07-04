@@ -91,24 +91,36 @@ class CamThread(threading.Thread):
 quality=90
 encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
 change_flag=False
-class keyThread(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
 
-    def run(self):
-        global change_flag
-        global quality
-        char = getch.getch()
-        print("you pressed:",char)
-        if char=="w":
+from pynput import keyboard
+
+def on_press(key):
+    global quality
+    global encode_param
+    try:
+        if key.char=="w":
             if quality<=90:
                 quality+=5
-        if char=="s":
+        if key.char=="s":
             if quality>=10:
                 quality-=5
-        change_flag=True
-        time.sleep(0.01)
+        encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
+        print("quality:{}".format(quality))
+    except AttributeError:
+        print('on press error')
 
+def on_release(key):
+    if key == keyboard.Key.esc:
+        # Stop listener
+        return False
+
+# Collect events until released
+with keyboard.Listener(on_press=on_press,on_release=on_release) as listener:
+    listener.join()
+
+# ...or, in a non-blocking fashion:
+listener = keyboard.Listener(on_press=on_press,on_release=on_release)
+listener.start()
 
     
 #######################
@@ -117,10 +129,6 @@ key_thread.start()
 #cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 cam = cv2.VideoCapture(0)
 while True:
-    if change_flag:
-        encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
-        print("quality:{}".format(quality))
-        change_flag=False
 
     ret, frame = cam.read()
     result, imgencode = cv2.imencode('.jpg', frame, encode_param)
