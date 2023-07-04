@@ -4,6 +4,44 @@ import numpy
 import zlib
 import json
 from datetime import datetime
+import ntplib
+import time
+
+try:
+    print("time sync...")
+    # Create an NTP client
+    ntp_client = ntplib.NTPClient()
+
+    # Connect to the NTP server on Device 1's IP address
+    response = ntp_client.request('192.168.50.152', version=3)
+
+    # Calculate the round-trip time (latency)
+    round_trip_time =  response.orig_time - response.tx_time
+
+    # Client local time -> orig_time t1
+    # NTP server receives at the server time ->recv_time t2
+    # NTP server replies at server time -> tx_time t3
+    # Client receives that reply at local time -> dest_time t4
+    t1=response.orig_time
+    t2=response.recv_time
+    t3=response.tx_time
+    t4=response.dest_time
+    sync_time=t3+(t4-t3+t2-t1)/2
+    start_time=time.time()
+
+
+    print("sync finished")
+except:
+    print("no ntp server, shut down")
+
+
+
+
+
+
+
+
+
 def recvall(sock, count):
     buf = b''
     while count:
@@ -36,6 +74,8 @@ while 1:
     json_msg=json_msg.decode('utf-8')
     json_msg=json.loads(json_msg)
     print(json_msg)
+    latency=sync_time+time.time()-start_time-json_msg["time"]
+    print("latency={:.3f}s".format(latency))
     #print(type(json_msg["size"]))
     #stringData = recvall(conn, int(length))
     stringData = recvall(conn, json_msg["size"])

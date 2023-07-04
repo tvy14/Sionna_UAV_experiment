@@ -129,6 +129,7 @@ cam = cv2.VideoCapture(0)
 while True:
 
     ret, frame = cam.read()
+    frame_time=time.time()
     result, imgencode = cv2.imencode('.jpg', frame, encode_param)
     #-----calculate psnr-----
     new_image = np.frombuffer(imgencode, np.uint8)
@@ -140,7 +141,7 @@ while True:
     stringData = data.tostring()
 
     #-------PSNR、frame size to json-----
-    json_msg={"PSNR":psnr, "size":len(stringData),'time': time.time()}
+    json_msg={"PSNR":psnr, "size":len(stringData),'time': frame_time}
     json_msg=json.dumps(json_msg)
     sock.send(json_msg.ljust(200).encode('utf-8'))
     #sock.send( (str(len(stringData)).ljust(16)).encode('utf-8'))
