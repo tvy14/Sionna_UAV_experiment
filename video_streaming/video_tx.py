@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import threading
 import time
+import json
 
 TCP_IP = "192.168.50.36"
 TCP_PORT = 8002
@@ -49,10 +50,15 @@ class CamThread(threading.Thread):
             new_image=cv2.imdecode(new_image,1)
             psnr=calculate_psnr(frame, new_image)
             print("PSNR:{:.2f}dB".format(psnr))
-            #-----calculate psnr------
+            #-----calculate psnr end------
             data = np.array(imgencode)
             stringData = data.tostring()
-            sock.send( (str(len(stringData)).ljust(16)).encode('utf-8'))
+
+            #-------PSNR、frame size to json-----
+            json_msg={"PSNR":psnr, "size:":len(stringData)}
+            json_msg=json.dumps(json_msg)
+            sock.send(json_msg)
+            #sock.send( (str(len(stringData)).ljust(16)).encode('utf-8'))
             sock.send( stringData )
         sock.close()
         cam.release()

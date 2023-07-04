@@ -29,9 +29,12 @@ if save_video:
     out = cv2.VideoWriter(video_name, fourcc, 30.0, (640, 480))
 while 1:
     count+=1
-    length = recvall(conn,16)
-    length=length.decode('utf-8')
-    stringData = recvall(conn, int(length))
+    #length = recvall(conn,16)
+    #length=length.decode('utf-8')
+    json_msg=recvall(conn)
+    print(json_msg)
+    #stringData = recvall(conn, int(length))
+    stringData = recvall(conn, json_msg["size"])
     #stringData = zlib.decompress(stringData)
     #print('old={} new={}'.format(len(stringData), len(zlib.compress(stringData)) ))
     data = numpy.fromstring(stringData, dtype='uint8')
