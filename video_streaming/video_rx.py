@@ -12,6 +12,7 @@ def recvall(sock, count):
         count -= len(newbuf)
     return buf
 
+save_video=False
 TCP_IP = "192.168.50.36"
 TCP_PORT = 8002
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -24,7 +25,8 @@ fourcc = cv2.VideoWriter_fourcc(*'MPEG')
 
 now = datetime.now()
 video_name="output_{}_{}_{}_{}_{}.mp4".format(now.month, now.day, now.hour, now.minute, now.second)
-out = cv2.VideoWriter(video_name, fourcc, 30.0, (640, 480))
+if save_video:
+    out = cv2.VideoWriter(video_name, fourcc, 30.0, (640, 480))
 while 1:
     count+=1
     length = recvall(conn,16)
@@ -35,17 +37,19 @@ while 1:
     data = numpy.fromstring(stringData, dtype='uint8')
     decimg=cv2.imdecode(data,1)
     #decimg = cv2.resize(decimg, (1600, 1200))
-    out.write(decimg)
+    if save_video:
+        out.write(decimg)
     cv2.imshow('SERVER',decimg)
-    if cv2.waitKey(15) & 0xFF == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-    if cv2.waitKey(15) & 0xFF == ord('c'):
+    if cv2.waitKey(1) & 0xFF == ord('c'):
         now = datetime.now()
         cv2.imwrite("output_{}_{}_{}_{}_{}.jpg".format(now.month, now.day, now.hour, now.minute, now.second), decimg)
         print("save img: output_{}_{}_{}_{}_{}.jpg".format(now.month, now.day, now.hour, now.minute, now.second))
 
+if save_video:
+    out.release()
 s.close()
-out.release()
 cv2.destroyAllWindows()
 
 
