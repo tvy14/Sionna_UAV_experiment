@@ -9,8 +9,7 @@ TCP_IP = "192.168.50.36"
 TCP_PORT = 8002
 sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))
-quality=90
-encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
+
 
 
 def calculate_psnr(img1, img2):
@@ -43,6 +42,8 @@ class CamThread(threading.Thread):
         global cam
         #cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         cam = cv2.VideoCapture(0)
+        quality=90
+        encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),quality]
         while True:
             if cv2.waitKey(1) & 0xFF == ord('w'):
                 if quality<=90:
