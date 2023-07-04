@@ -1,6 +1,6 @@
 import socket
 import cv2
-import numpy
+import numpy as np
 import threading
 import time
 
@@ -50,7 +50,7 @@ class CamThread(threading.Thread):
             psnr=calculate_psnr(frame, new_image)
             print("PSNR:{.2f}dB".format(psnr))
             #-----calculate psnr------
-            data = numpy.array(imgencode)
+            data = np.array(imgencode)
             stringData = data.tostring()
             sock.send( (str(len(stringData)).ljust(16)).encode('utf-8'))
             sock.send( stringData )
