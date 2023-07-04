@@ -124,8 +124,6 @@ listener.start()
 
     
 #######################
-key_thread=keyThread()
-key_thread.start()
 #cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 cam = cv2.VideoCapture(0)
 while True:
