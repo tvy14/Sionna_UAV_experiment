@@ -5,12 +5,12 @@ from time import time, sleep
 ntp_client = ntplib.NTPClient()
 
 # Connect to the NTP server on Device 1's IP address
-response = ntp_client.request('192.168.50.172', version=3)
+response = ntp_client.request('192.168.50.152', version=3)
 
 # Calculate the round-trip time (latency)
 round_trip_time =  response.orig_time - response.tx_time
 while True:
-    response = ntp_client.request('192.168.50.172', version=3)
+    response = ntp_client.request('192.168.50.152', version=3)
     print(response.tx_time,response.dest_time ,response.offset)
     #print(response.tx_time)
     sleep(1)
