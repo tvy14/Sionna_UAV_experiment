@@ -58,8 +58,8 @@ class CamThread(threading.Thread):
                 print("quality:{}".format(quality))
 
 
-            ret, frame = cam.read()
             frame_start_time=time.time()
+            ret, frame = cam.read()
             result, imgencode = cv2.imencode('.jpg', frame, encode_param)
             #-----calculate psnr-----
             new_image = np.frombuffer(imgencode, np.uint8)
